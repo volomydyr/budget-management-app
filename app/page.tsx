@@ -1,4 +1,3 @@
-
 "use client"
 import * as React from "react"
 import { useState, useEffect } from 'react'
@@ -43,10 +42,10 @@ type SortDirection = 'asc' | 'desc' | null;
 
 type BaseFields = 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining';
 
-type SortableFields = BaseFields | 'spentProgress';
+type SortKey = BaseFields | 'spentProgress';
 
 type SortConfig = {
-  key: SortableFields;
+  key: SortKey;
   direction: SortDirection;
 } | null;
 
@@ -980,6 +979,15 @@ const getStatusOrder = (status: string): number => {
 // Add this helper function near other utility functions
 const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
   return Object.values(checkedItems).filter(Boolean).length;
+};
+
+// Update the type definition to include 'spentProgress'
+type SortKey = "progress" | "name" | "totalAmount" | "committed" | "uncommitted" | "actuallySpent" | "remaining" | "spentProgress";
+
+// Ensure sortConfig.key is of type SortKey
+const sortConfig: { key: SortKey; direction: string } = {
+    key: "spentProgress", // or any other default value
+    direction: "asc", // or "desc"
 };
 
 export default function BudgetsPage() {
