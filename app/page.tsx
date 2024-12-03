@@ -46,7 +46,7 @@ type BudgetSortKey = BaseFields | 'spentProgress';
 
 type SortConfig = {
   key: BudgetSortKey;
-  direction: string;
+  direction: SortDirection;
 } | null;
 
 type LineItem = {
@@ -981,9 +981,6 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
   return Object.values(checkedItems).filter(Boolean).length;
 };
 
-// Update the type definition to include 'spentProgress'
-type BudgetSortKey = "progress" | "name" | "totalAmount" | "committed" | "uncommitted" | "actuallySpent" | "remaining" | "spentProgress";
-
 // Ensure sortConfig.key is of type BudgetSortKey
 const sortConfig: { key: BudgetSortKey; direction: string } = {
     key: "spentProgress", // or any other default value
@@ -1326,17 +1323,17 @@ export default function BudgetsPage() {
         const spentProgressA = (a.actuallySpent / a.totalAmount) * 100;
         const spentProgressB = (b.actuallySpent / b.totalAmount) * 100;
         
-        if (spentProgressA < spentProgressB) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (spentProgressA > spentProgressB) return sortConfig.direction === 'asc' ? 1 : -1;
+        if (spentProgressA < spentProgressB) return sortConfig.direction === 'asc' ? 1 : -1;
+        if (spentProgressA > spentProgressB) return sortConfig.direction === 'asc' ? -1 : 1;
         return 0;
       }
 
-      // Handle all other sortable fields
+      // Handle all other sortable fields with reversed logic
       const valueA = a[sortConfig.key as BaseFields];
       const valueB = b[sortConfig.key as BaseFields];
       
-      if (valueA < valueB) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (valueA > valueB) return sortConfig.direction === 'asc' ? 1 : -1;
+      if (valueA < valueB) return sortConfig.direction === 'asc' ? 1 : -1;
+      if (valueA > valueB) return sortConfig.direction === 'asc' ? -1 : 1;
       return 0;
     });
   }, [budgetData, sortConfig]);
