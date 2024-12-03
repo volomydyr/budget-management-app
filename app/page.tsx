@@ -46,7 +46,7 @@ type SortKey = BaseFields | 'spentProgress';
 
 type SortConfig = {
   key: SortKey;
-  direction: SortDirection;
+  direction: string;
 } | null;
 
 type LineItem = {
