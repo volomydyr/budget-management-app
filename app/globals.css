@@ -1,0 +1,337 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 224 3% 89%;
+    --input: 224 3% 89%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.overflow-x-auto {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+}
+
+thead .sticky.top-0,
+table .sticky.top-0 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08),
+              0 2px 6px rgba(0, 0, 0, 0.12);
+  background-color: #ffffff;
+  background-clip: padding-box;
+}
+
+thead.sticky {
+  z-index: 30;
+}
+
+tfoot.sticky {
+  z-index: 30;
+}
+
+html, 
+body {
+  height: 100%;
+}
+
+main {
+  height: 100%;
+}
+
+tr:not(.rdp-row):hover {
+  background-color: #F4F4F5 !important;
+}
+
+tbody tr:not(.rdp-row):hover .sticky {
+  background-color: #F4F4F5 !important;
+}
+
+tr.bg-muted\/30:not(.rdp-row):hover,
+tr.bg-muted\/30:not(.rdp-row):hover .sticky {
+  background-color: #F4F4F5 !important;
+}
+
+.sticky.left-0 {
+  z-index: 20;
+  background-color: #ffffff;
+  background-clip: padding-box;
+}
+
+.sticky.left-\[40px\] {
+  z-index: 19;
+  left: 40px;
+  padding-left: 0;
+  border-left: none;
+  background-color: #ffffff;
+}
+
+.nowrap-table {
+  white-space: nowrap;
+}
+
+.nowrap-table th,
+.nowrap-table td {
+  white-space: nowrap;
+}
+
+thead .sticky.left-0,
+tfoot .sticky.left-0 {
+  z-index: 31;
+  background-color: #ffffff !important;
+}
+
+thead .sticky.left-\[40px\],
+tfoot .sticky.left-\[40px\] {
+  z-index: 31;
+  background-color: #ffffff !important;
+}
+
+td:has([role="checkbox"]),
+th:has([role="checkbox"]) {
+  padding: 0;
+  width: 40px;
+}
+
+tr:hover .sticky.left-0,
+tr:hover .sticky.left-\[40px\] {
+  background-color: #F4F4F5 !important;
+}
+
+tr.bg-muted\/30 .sticky.left-0,
+tr.bg-muted\/30 .sticky.left-\[40px\] {
+  background-color: #fafafa !important;
+}
+
+tr.bg-muted\/30:hover .sticky.left-0,
+tr.bg-muted\/30:hover .sticky.left-\[40px\] {
+  background-color: #F4F4F5 !important;
+}
+
+thead tr:hover .sticky.left-0,
+thead tr:hover .sticky.left-\[40px\],
+tfoot tr:hover .sticky.left-0,
+tfoot tr:hover .sticky.left-\[40px\] {
+  background-color: #ffffff !important;
+}
+
+thead tr:hover,
+tfoot tr:hover {
+  background-color: transparent !important;
+}
+
+thead tr:hover .sticky,
+tfoot tr:hover .sticky {
+  background-color: #ffffff !important;
+}
+
+/* Update the tfoot styles for complete coverage */
+tfoot tr td {
+  background-color: #fafafa !important;
+  padding: 0; /* Remove default padding */
+}
+
+tfoot tr td.sticky.left-0 {
+  background-color: #fafafa !important;
+  padding: 0; /* Remove default padding */
+}
+
+/* Ensure the content div fills the entire cell */
+tfoot tr td.sticky.left-0 .flex {
+  background-color: #fafafa !important;
+  height: 100%;
+  width: 100%;
+}
+
+/* Override hover styles for footer */
+tfoot tr:hover td,
+tfoot tr:hover td.sticky.left-0,
+tfoot tr:hover td.sticky.left-0 .flex {
+  background-color: #fafafa !important;
+}
+
+/* Remove the muted color from the footer text */
+tfoot [class*="text-muted-foreground"] {
+  color: inherit;
+}
+
+/* Add this to hide borders for the Total cell */
+tfoot tr:last-child td:first-child {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Hide the vertical divider in the footer */
+tfoot tr td:first-child + td .absolute {
+  display: none !important;
+}
+
+/* Update the sticky bottom-0 style to not apply to tfoot */
+.sticky.bottom-0:not(tfoot tr td) {
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Add these new styles for the border colors */
+tfoot tr:first-child td {
+  border-top-color: white !important;
+}
+
+tfoot tr:last-child {
+  border-bottom-color: white !important;
+}
+
+/* Hide scrollbars but keep scrolling functionality */
+.overflow-y-auto,
+.overflow-x-auto {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Specifically for the modal panels */
+.modal-panel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.modal-panel::-webkit-scrollbar {
+  display: none;
+}
+
+/* For the main page/body */
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* For any potential horizontal scrolling */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Update these styles */
+.search-input:focus {
+  outline: 2px solid #8CB3FB;
+  outline-offset: -1px;
+  border-color: #8CB3FB;
+}
+
+/* Add this specific style */
+tfoot tr.h-[52px] {
+  height: 52px !important;
+}
+
+/* Add this new style to explicitly remove hover from calendar */
+.rdp table tr:hover {
+  background-color: transparent !important;
+}
+
+.rdp-row:hover {
+  background-color: transparent !important;
+}
+
+/* More specific selectors to remove hover effect from thead */
+tr:not(.rdp-row):hover {
+  background-color: #F4F4F5 !important;
+}
+
+/* Explicitly exclude thead rows from hover effect */
+thead tr:not(.rdp-row):hover,
+thead tr:not(.rdp-row):hover td,
+thead tr:not(.rdp-row):hover th {
+  background-color: transparent !important;
+}
+
+/* Ensure sticky headers maintain their white background */
+thead .sticky.top-0,
+thead tr:hover .sticky.top-0 {
+  background-color: #ffffff !important;
+}
