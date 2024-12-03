@@ -972,13 +972,22 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
 
 type SortDirection = 'asc' | 'desc' | null;
 
+// Add this type to define sortable fields
+type SortableFields = keyof Pick<LineItem, 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining'>;
+
+// Update the sort config type
+type SortConfig = {
+  key: SortableFields;
+  direction: SortDirection;
+} | null;
+
 export default function BudgetsPage() {
   const [showModal, setShowModal] = useState(false)
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({})
   const [isAllChecked, setIsAllChecked] = useState(false)
   const [sharedUsers, setSharedUsers] = useState<{ [key: string]: Array<typeof userPool[0]> }>({})
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: SortDirection } | null>(null);
+  const [sortConfig, setSortConfig] = useState<SortConfig>(null);
 
   useEffect(() => {
     const newSharedUsers: { [key: string]: Array<typeof userPool[0]> } = {}
@@ -1281,7 +1290,7 @@ export default function BudgetsPage() {
     return checkedCount > 0 && checkedCount < budgetData.length;
   };
 
-  const handleSort = (key: string) => {
+  const handleSort = (key: SortableFields) => {
     let direction: SortDirection = 'asc';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -1294,7 +1303,7 @@ export default function BudgetsPage() {
   const sortedData = React.useMemo(() => {
     if (!sortConfig || sortConfig.direction === null) return budgetData;
 
-    const sorted = [...budgetData].sort((a, b) => {
+    return [...budgetData].sort((a, b) => {
       if (sortConfig.key === 'status') {
         const orderA = getStatusOrder(a.status);
         const orderB = getStatusOrder(b.status);
@@ -1314,12 +1323,13 @@ export default function BudgetsPage() {
       }
 
       // Default sorting for other fields
-      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'asc' ? 1 : -1;
+      const valueA = a[sortConfig.key];
+      const valueB = b[sortConfig.key];
+      
+      if (valueA < valueB) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (valueA > valueB) return sortConfig.direction === 'asc' ? 1 : -1;
       return 0;
     });
-
-    return sorted;
   }, [budgetData, sortConfig]);
 
   return (
