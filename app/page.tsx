@@ -970,6 +970,8 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
   return Object.values(checkedItems).filter(Boolean).length;
 };
 
+type SortDirection = 'asc' | 'desc';
+
 export default function BudgetsPage() {
   const [showModal, setShowModal] = useState(false)
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({})
