@@ -972,10 +972,10 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-// Update the SortableFields type to include 'spentProgress'
+// Update the SortableFields type to include all sortable fields
 type SortableFields = keyof Pick<LineItem, 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining'> | 'spentProgress' | 'status';
 
-// Update the sort config type
+// Update the type for the sort config to match
 type SortConfig = {
   key: SortableFields;
   direction: SortDirection;
