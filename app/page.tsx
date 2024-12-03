@@ -38,6 +38,24 @@ const userPool = [
   { initials: 'EW', name: 'Emma Watson' },
 ];
 
+type SortDirection = 'asc' | 'desc' | null;
+
+type SortableFields = 
+  | 'name'
+  | 'status'
+  | 'totalAmount'
+  | 'committed'
+  | 'uncommitted'
+  | 'progress'
+  | 'actuallySpent'
+  | 'remaining'
+  | 'spentProgress';
+
+type SortConfig = {
+  key: SortableFields;
+  direction: SortDirection;
+} | null;
+
 type LineItem = {
   id?: string;
   name: string;
@@ -969,17 +987,6 @@ const getStatusOrder = (status: string): number => {
 const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
   return Object.values(checkedItems).filter(Boolean).length;
 };
-
-type SortDirection = 'asc' | 'desc' | null;
-
-// Define all possible sort fields explicitly
-type SortableFields = 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining' | 'spentProgress';
-
-// Update the sort config type
-type SortConfig = {
-  key: SortableFields;
-  direction: SortDirection;
-} | null;
 
 export default function BudgetsPage() {
   const [showModal, setShowModal] = useState(false)
