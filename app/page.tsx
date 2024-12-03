@@ -972,10 +972,10 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-// Update the SortableFields type to include all sortable fields without duplicates
-type SortableFields = keyof Pick<LineItem, 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining'> | 'spentProgress';
+// Define all possible sort fields explicitly
+type SortableFields = 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining' | 'spentProgress';
 
-// Update the type for the sort config to match
+// Update the sort config type
 type SortConfig = {
   key: SortableFields;
   direction: SortDirection;
