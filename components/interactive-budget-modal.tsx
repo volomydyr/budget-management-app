@@ -59,7 +59,7 @@ type BudgetTreeItemProps = {
   level?: number;
   onAdd: (parentId: string) => void;
   onRemove: (id: string) => void;
-  onUpdate: (id: string, field: string, value: string | number) => void;
+  onUpdate: (id: string, field: string, value: string | string[] | number) => void;
   currency: string;
   items: Entity[];
   hasAnyNestedItems: boolean;
@@ -745,13 +745,13 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
     });
   };
 
-  const handleUpdateLineItem = (id: string, field: string, value: string | number) => {
+  const handleUpdateLineItem = (id: string, field: string, value: string | string[] | number) => {
     setBudgetItems(prevItems => {
       return updateItemField(prevItems, id, field, value);
     });
   };
 
-  const updateItemField = (items: LineItem[], id: string, field: string, value: string | number): LineItem[] => {
+  const updateItemField = (items: LineItem[], id: string, field: string, value: string | string[] | number): LineItem[] => {
     return items.map(item => {
       if (item.id === id) {
         return { ...item, [field]: value };
