@@ -956,11 +956,11 @@ function getPeriodDates(period: string) {
 }
 
 const getStatusOrder = (status: string): number => {
-  const statusOrder = {
-    'active': 1,
-    'submitted': 2,
-    'draft': 3,
-    'closed': 4
+  const statusOrder: { [key: string]: number } = {
+    active: 1,
+    submitted: 2,
+    draft: 3,
+    closed: 4
   };
   return statusOrder[status.toLowerCase()] || 999; // Default high number for unknown statuses
 };
