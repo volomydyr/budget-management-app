@@ -6,14 +6,7 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-const Select = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> & {
-    className?: string;
-  }
->(({ className, ...props }, ref) => (
-  <SelectPrimitive.Root ref={ref} {...props} />
-))
+const Select = SelectPrimitive.Root
 Select.displayName = SelectPrimitive.Root.displayName
 
 const SelectGroup = SelectPrimitive.Group

@@ -338,7 +338,8 @@ const calculateBudgetOverflow = (
   softValue: number,
   showHard: boolean,
   hardType: 'fixed' | 'percentage',
-  hardValue: number
+  hardValue: number,
+  budgetValue: string
 ): number => {
   // Calculate total from line items
   const lineItemsTotal = calculateTopLevelLineItems(items || []);
@@ -360,32 +361,29 @@ const calculateBudgetOverflow = (
   // Sum everything up
   const totalWithContingencies = lineItemsTotal + softContingencyAmount + hardContingencyAmount;
   
-  console.log('Budget Overflow Calculation:', {
-    budgetType,
-    parentBudget,
-    lineItemsTotal,
-    softContingencyAmount,
-    hardContingencyAmount,
-    totalWithContingencies,
-    budget,
-    parentBudgetData: parentBudget !== 'none' ? parentBudgets.find(b => b.id.toString() === parentBudget) : null
-  });
-
-  // If it's a sum type with a parent budget, compare against parent's available amount
+  // Get parent budget data
+  const parentBudgetData = parentBudgets.find(b => b.id.toString() === parentBudget);
+  const parentAvailable = parentBudgetData?.available || 0;
+  
+  // If it's a fixed type with a parent budget
+  if (budgetType === 'fixed' && parentBudget !== 'none') {
+    return parentAvailable - budget;
+  }
+  
+  // If it's a percentage type with a parent budget
+  if (budgetType === 'percentage' && parentBudget !== 'none') {
+    const parentAmount = parentBudgetData?.amount || 0;
+    const calculatedAmount = (parseFloat(budgetValue) / 100) * parentAmount;
+    return parentAvailable - calculatedAmount;
+  }
+  
+  // If it's a sum type with a parent budget
   if (budgetType === 'sum' && parentBudget !== 'none') {
-    const parentBudgetData = parentBudgets.find(b => b.id.toString() === parentBudget);
-    const parentAvailable = parentBudgetData?.available || 0;
-    console.log('Parent Budget Comparison:', {
-      parentAvailable,
-      difference: parentAvailable - totalWithContingencies
-    });
     return parentAvailable - totalWithContingencies;
   }
   
   // Otherwise, return the difference against the specified budget
-  const difference = budget - totalWithContingencies;
-  console.log('Regular Budget Comparison:', { difference });
-  return difference;
+  return budget - totalWithContingencies;
 };
 
 // Add this helper function at the top with other utility functions
@@ -651,7 +649,8 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
     
     if (parentBudget && budgetType === 'percentage') {
       const parentAmount = parentBudgets.find(b => b.id.toString() === parentBudget)?.amount || 0;
-      total = (parseFloat(budgetValue) / 100) * parentAmount;
+      // Only calculate if budgetValue is not empty/zero
+      total = budgetValue ? (parseFloat(budgetValue) / 100) * parentAmount : 0;
     } else if (budgetType === 'fixed') {
       total = parseFloat(budgetValue) || 0;
     } else if (budgetType === 'sum') {
@@ -659,7 +658,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
     }
 
     setTotalBudget(total);
-  }, [budgetType, budgetValue, parentBudget, parentBudgets]);
+  }, [budgetType, budgetValue, parentBudget, parentBudgets, budgetItems]);
 
   useEffect(() => {
     calculateTotalBudget()
@@ -801,7 +800,8 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
     softValue: number,
     showHard: boolean,
     hardType: 'fixed' | 'percentage',
-    hardValue: number
+    hardValue: number,
+    budgetValue: string
   ): number => {
     // Calculate total from line items
     const lineItemsTotal = calculateTopLevelLineItems(items || []);
@@ -823,32 +823,29 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
     // Sum everything up
     const totalWithContingencies = lineItemsTotal + softContingencyAmount + hardContingencyAmount;
     
-    console.log('Budget Overflow Calculation:', {
-      budgetType,
-      parentBudget,
-      lineItemsTotal,
-      softContingencyAmount,
-      hardContingencyAmount,
-      totalWithContingencies,
-      budget,
-      parentBudgetData: parentBudget !== 'none' ? parentBudgets.find(b => b.id.toString() === parentBudget) : null
-    });
-
-    // If it's a sum type with a parent budget, compare against parent's available amount
+    // Get parent budget data
+    const parentBudgetData = parentBudgets.find(b => b.id.toString() === parentBudget);
+    const parentAvailable = parentBudgetData?.available || 0;
+    
+    // If it's a fixed type with a parent budget
+    if (budgetType === 'fixed' && parentBudget !== 'none') {
+      return parentAvailable - budget;
+    }
+    
+    // If it's a percentage type with a parent budget
+    if (budgetType === 'percentage' && parentBudget !== 'none') {
+      const parentAmount = parentBudgetData?.amount || 0;
+      const calculatedAmount = (parseFloat(budgetValue) / 100) * parentAmount;
+      return parentAvailable - calculatedAmount;
+    }
+    
+    // If it's a sum type with a parent budget
     if (budgetType === 'sum' && parentBudget !== 'none') {
-      const parentBudgetData = parentBudgets.find(b => b.id.toString() === parentBudget);
-      const parentAvailable = parentBudgetData?.available || 0;
-      console.log('Parent Budget Comparison:', {
-        parentAvailable,
-        difference: parentAvailable - totalWithContingencies
-      });
       return parentAvailable - totalWithContingencies;
     }
     
     // Otherwise, return the difference against the specified budget
-    const difference = budget - totalWithContingencies;
-    console.log('Regular Budget Comparison:', { difference });
-    return difference;
+    return budget - totalWithContingencies;
   };
 
   // Update where the budgetOverflow is calculated in the component
@@ -864,7 +861,8 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
       softContingencyValue,
       showHardContingency,
       hardContingencyType,
-      hardContingencyValue
+      hardContingencyValue,
+      budgetValue
     );
   }, [
     budgetItems,
@@ -877,7 +875,8 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
     softContingencyValue,
     showHardContingency,
     hardContingencyType,
-    hardContingencyValue
+    hardContingencyValue,
+    budgetValue
   ]);
 
   // Update the hasValidationErrors check
@@ -886,8 +885,38 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
     const hasBudgetOverflow = budgetOverflow < 0;
     const shouldCheckBudgetOverflow = parentBudget !== 'none' || budgetType !== 'sum';
     
-    return hasOverflows || (shouldCheckBudgetOverflow && hasBudgetOverflow);
-  }, [budgetItems, budgetType, budgetOverflow, parentBudget]);
+    // Add check for line items exceeding budget amount
+    const hasLineItemOverflow = (() => {
+      const lineItemsTotal = calculateTopLevelLineItems(budgetItems);
+      
+      if (parentBudget !== 'none') {
+        // Existing parent budget checks
+        if (budgetType === 'fixed') {
+          return lineItemsTotal > parseFloat(budgetValue);
+        }
+        
+        if (budgetType === 'percentage') {
+          const parentAmount = parentBudgets.find(b => b.id.toString() === parentBudget)?.amount || 0;
+          const calculatedAmount = (parseFloat(budgetValue) / 100) * parentAmount;
+          return lineItemsTotal > calculatedAmount;
+        }
+        
+        if (budgetType === 'sum') {
+          const parentAvailable = parentBudgets.find(b => b.id.toString() === parentBudget)?.available || 0;
+          return lineItemsTotal > parentAvailable;
+        }
+      } else {
+        // No parent budget checks
+        if (budgetType === 'fixed') {
+          return lineItemsTotal > parseFloat(budgetValue);
+        }
+      }
+      
+      return false;
+    })();
+    
+    return hasOverflows || (shouldCheckBudgetOverflow && hasBudgetOverflow) || hasLineItemOverflow;
+  }, [budgetItems, budgetType, budgetOverflow, parentBudget, budgetValue, parentBudgets]);
 
   // Update the useEffect to ensure there's always at least one item
   useEffect(() => {
@@ -1013,9 +1042,8 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                   setBudgetType(value === 'none' ? 'fixed' : budgetType);
                                   handleDetailsChange();
                                 }}
-                                className="h-9"
                               >
-                                <SelectTrigger>
+                                <SelectTrigger className="h-9">
                                   <SelectValue placeholder="Select parent budget" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1090,8 +1118,16 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                       }
                                     }}
                                     placeholder="0"
-                                    className="h-10 max-w-[480px]"
+                                    className={cn(
+                                      "h-10 max-w-[480px]",
+                                      budgetOverflow < 0 && parentBudget !== 'none' && "border-[#CE2C31] focus-visible:ring-[#CE2C31]"
+                                    )}
                                   />
+                                  {budgetOverflow < 0 && parentBudget !== 'none' && (
+                                    <p className="text-[#CE2C31] text-sm mt-1.5">
+                                      This amount overflows parent's unallocated amount by {formatNumber(Math.abs(budgetOverflow))} {currency}
+                                    </p>
+                                  )}
                                 </div>
                               </>
                             )}
@@ -1117,7 +1153,10 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                   }}
                                   placeholder="0"
                                   max="100"
-                                  className="h-10 max-w-[480px]"
+                                  className={cn(
+                                    "h-10 max-w-[480px]",
+                                    budgetOverflow < 0 && "border-[#CE2C31] focus-visible:ring-[#CE2C31]"
+                                  )}
                                 />
                                 <p className="text-sm text-muted-foreground max-w-[480px]">
                                   {(() => {
@@ -1127,13 +1166,18 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                     return `Preview: ${currencySymbol}${isNaN(calculatedAmount) ? '0' : formatNumber(calculatedAmount)} ${currency}`;
                                   })()}
                                 </p>
+                                {budgetOverflow < 0 && (
+                                  <p className="text-[#CE2C31] text-sm mt-1.5">
+                                    This percentage overflows parent's unallocated amount by {formatNumber(Math.abs(budgetOverflow))} {currency}
+                                  </p>
+                                )}
                               </div>
                             )}
 
                             <div>
                               <Label>Currency</Label>
-                              <Select value={currency} onValueChange={setCurrency} className="h-9">
-                                <SelectTrigger>
+                              <Select value={currency} onValueChange={setCurrency}>
+                                <SelectTrigger className="h-9">
                                   <SelectValue placeholder="Select currency" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1431,7 +1475,60 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                           </TooltipProvider>
                         </h3>
                         
-                        {/* Add error message for negative overflows */}
+                        {/* Parent budget overflow error messages */}
+                        {parentBudget !== 'none' && (
+                          <>
+                            {/* For sum type */}
+                            {budgetType === 'sum' && 
+                             calculateTopLevelLineItems(budgetItems) > (parentBudgets.find(b => b.id.toString() === parentBudget)?.available || 0) && (
+                              <div className="text-[#CE2C31] flex gap-2">
+                                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                <span className="text-[14px] font-medium">
+                                  The total of line items ({formatNumber(calculateTopLevelLineItems(budgetItems))} {currency}) exceeds the parent budget's unallocated amount ({formatNumber(parentBudgets.find(b => b.id.toString() === parentBudget)?.available || 0)} {currency})
+                                </span>
+                              </div>
+                            )}
+                            
+                            {/* For fixed type */}
+                            {budgetType === 'fixed' && 
+                             calculateTopLevelLineItems(budgetItems) > parseFloat(budgetValue) && (
+                              <div className="text-[#CE2C31] flex gap-2">
+                                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                <span className="text-[14px] font-medium">
+                                  The total of line items ({formatNumber(calculateTopLevelLineItems(budgetItems))} {currency}) exceeds the fixed budget amount ({formatNumber(parseFloat(budgetValue))} {currency})
+                                </span>
+                              </div>
+                            )}
+                            
+                            {/* For percentage type */}
+                            {budgetType === 'percentage' && (() => {
+                              const parentAmount = parentBudgets.find(b => b.id.toString() === parentBudget)?.amount || 0;
+                              const calculatedAmount = (parseFloat(budgetValue) / 100) * parentAmount;
+                              return calculateTopLevelLineItems(budgetItems) > calculatedAmount;
+                            })() && (
+                              <div className="text-[#CE2C31] flex gap-2">
+                                <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                <span className="text-[14px] font-medium">
+                                  The total of line items ({formatNumber(calculateTopLevelLineItems(budgetItems))} {currency}) exceeds the calculated budget amount ({formatNumber((parseFloat(budgetValue) / 100) * (parentBudgets.find(b => b.id.toString() === parentBudget)?.amount || 0))} {currency})
+                                </span>
+                              </div>
+                            )}
+                          </>
+                        )}
+                        
+                        {/* No parent budget overflow error message */}
+                        {parentBudget === 'none' && 
+                         budgetType === 'fixed' && 
+                         calculateTopLevelLineItems(budgetItems) > parseFloat(budgetValue) && (
+                          <div className="text-[#CE2C31] flex gap-2">
+                            <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                            <span className="text-[14px] font-medium">
+                              The total of line items ({formatNumber(calculateTopLevelLineItems(budgetItems))} {currency}) exceeds the fixed budget amount ({formatNumber(parseFloat(budgetValue))} {currency})
+                            </span>
+                          </div>
+                        )}
+                        
+                        {/* Existing negative overflows error */}
                         {hasNegativeOverflows(budgetItems) && (
                           <div className="text-[#CE2C31] flex gap-2">
                             <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
@@ -1624,41 +1721,37 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                   <span className="font-semibold">Total amount:</span>
                                   <span className="font-semibold">
                                     {currency === 'USD' ? '$' : currency === 'EUR' ? '€' : '£'}
-                                    {formatNumber(
-                                      budgetType === 'sum' 
-                                        ? (calculateTopLevelLineItems(budgetItems) + 
-                                          (showSoftContingency ? calculateSoftContingency() : 0) + 
-                                          (showHardContingency ? calculateHardContingency() : 0)) || 0
-                                        : totalBudget || 0
-                                    )} {currency}
+                                    {formatNumber(totalBudget || 0)} {currency}
                                   </span>
                                 </div>
-                                {/* Only show parent overflow for sum type with parent budget when there's a negative overflow */}
-                                {budgetType === 'sum' && parentBudget !== 'none' && budgetOverflow < 0 && (
+                                {/* Show either Overflow or Unallocated based on the difference */}
+                                {((parentBudget === 'none' || budgetType === 'sum') && (
+                                  (budgetType === 'percentage' && (!budgetValue || parseFloat(budgetValue) === 0)) ||
+                                  totalBudget !== (calculateTopLevelLineItems(budgetItems) + 
+                                    (showSoftContingency ? calculateSoftContingency() : 0) + 
+                                    (showHardContingency ? calculateHardContingency() : 0))
+                                )) && (
                                   <div className="flex items-center justify-between text-sm">
-                                    <span className="text-muted-foreground">Parent overflow:</span>
-                                    <span className="text-[#CE2C31]">
-                                      {formatNumberWithSign(budgetOverflow || 0)} {currency}
-                                    </span>
-                                  </div>
-                                )}
-                                {/* Show unallocated for other cases */}
-                                {(budgetType !== 'sum' || parentBudget === 'none') && (
-                                  <div className="flex items-center justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                      {budgetOverflow > 0 ? 'Unallocated:' : budgetOverflow < 0 ? 'Overflow:' : 'Unallocated:'}
+                                    <span className={cn(
+                                      totalBudget > (calculateTopLevelLineItems(budgetItems) + 
+                                        (showSoftContingency ? calculateSoftContingency() : 0) + 
+                                        (showHardContingency ? calculateHardContingency() : 0)) ? 'text-[#289951]' : 'text-[#CE2C31]'
+                                    )}>
+                                      {totalBudget > (calculateTopLevelLineItems(budgetItems) + 
+                                        (showSoftContingency ? calculateSoftContingency() : 0) + 
+                                        (showHardContingency ? calculateHardContingency() : 0)) ? 'Unallocated:' : 'Overflow:'}
                                     </span>
                                     <span className={cn(
-                                      budgetOverflow > 0 ? "text-[#289951]" : 
-                                      budgetOverflow < 0 ? "text-[#CE2C31]" : ""
+                                      totalBudget > (calculateTopLevelLineItems(budgetItems) + 
+                                        (showSoftContingency ? calculateSoftContingency() : 0) + 
+                                        (showHardContingency ? calculateHardContingency() : 0)) ? 'text-[#289951]' : 'text-[#CE2C31]'
                                     )}>
-                                      {isNaN(budgetOverflow) ? (
-                                        `0 ${currency}`
-                                      ) : budgetOverflow === 0 ? (
-                                        `0 ${currency}`
-                                      ) : (
-                                        `${formatNumberWithSign(budgetOverflow)} ${currency}`
-                                      )}
+                                      {totalBudget > (calculateTopLevelLineItems(budgetItems) + 
+                                        (showSoftContingency ? calculateSoftContingency() : 0) + 
+                                        (showHardContingency ? calculateHardContingency() : 0)) ? '+' : ''}
+                                      {formatNumber(totalBudget - (calculateTopLevelLineItems(budgetItems) + 
+                                        (showSoftContingency ? calculateSoftContingency() : 0) + 
+                                        (showHardContingency ? calculateHardContingency() : 0)))} {currency}
                                     </span>
                                   </div>
                                 )}
