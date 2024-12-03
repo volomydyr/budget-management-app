@@ -972,8 +972,8 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-// Add this type to define sortable fields
-type SortableFields = keyof Pick<LineItem, 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining'>;
+// Update the SortableFields type to include 'spentProgress'
+type SortableFields = keyof Pick<LineItem, 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining'> | 'spentProgress';
 
 // Update the sort config type
 type SortConfig = {
@@ -1323,8 +1323,8 @@ export default function BudgetsPage() {
       }
 
       // Default sorting for other fields
-      const valueA = a[sortConfig.key];
-      const valueB = b[sortConfig.key];
+      const valueA = a[sortConfig.key as keyof LineItem];
+      const valueB = b[sortConfig.key as keyof LineItem];
       
       if (valueA < valueB) return sortConfig.direction === 'asc' ? -1 : 1;
       if (valueA > valueB) return sortConfig.direction === 'asc' ? 1 : -1;
