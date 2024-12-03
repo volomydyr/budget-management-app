@@ -42,10 +42,10 @@ type SortDirection = 'asc' | 'desc' | null;
 
 type BaseFields = 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining';
 
-type SortKey = BaseFields | 'spentProgress';
+type BudgetSortKey = BaseFields | 'spentProgress';
 
 type SortConfig = {
-  key: SortKey;
+  key: BudgetSortKey;
   direction: string;
 } | null;
 
@@ -982,10 +982,10 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
 };
 
 // Update the type definition to include 'spentProgress'
-type SortKey = "progress" | "name" | "totalAmount" | "committed" | "uncommitted" | "actuallySpent" | "remaining" | "spentProgress";
+type BudgetSortKey = "progress" | "name" | "totalAmount" | "committed" | "uncommitted" | "actuallySpent" | "remaining" | "spentProgress";
 
-// Ensure sortConfig.key is of type SortKey
-const sortConfig: { key: SortKey; direction: string } = {
+// Ensure sortConfig.key is of type BudgetSortKey
+const sortConfig: { key: BudgetSortKey; direction: string } = {
     key: "spentProgress", // or any other default value
     direction: "asc", // or "desc"
 };
@@ -1299,7 +1299,7 @@ export default function BudgetsPage() {
     return checkedCount > 0 && checkedCount < budgetData.length;
   };
 
-  const handleSort = (key: SortableFields) => {
+  const handleSort = (key: BudgetSortKey) => {
     let direction: SortDirection = 'asc';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
