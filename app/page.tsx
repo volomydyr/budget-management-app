@@ -1,3 +1,4 @@
+
 "use client"
 import * as React from "react"
 import { useState, useEffect } from 'react'
@@ -40,16 +41,9 @@ const userPool = [
 
 type SortDirection = 'asc' | 'desc' | null;
 
-type SortableFields = 
-  | 'name'
-  | 'status'
-  | 'totalAmount'
-  | 'committed'
-  | 'uncommitted'
-  | 'progress'
-  | 'actuallySpent'
-  | 'remaining'
-  | 'spentProgress';
+type BaseFields = 'name' | 'status' | 'totalAmount' | 'committed' | 'uncommitted' | 'progress' | 'actuallySpent' | 'remaining';
+
+type SortableFields = BaseFields | 'spentProgress';
 
 type SortConfig = {
   key: SortableFields;
@@ -1329,9 +1323,9 @@ export default function BudgetsPage() {
         return 0;
       }
 
-      // Default sorting for other fields
-      const valueA = a[sortConfig.key as keyof LineItem];
-      const valueB = b[sortConfig.key as keyof LineItem];
+      // Handle all other sortable fields
+      const valueA = a[sortConfig.key as BaseFields];
+      const valueB = b[sortConfig.key as BaseFields];
       
       if (valueA < valueB) return sortConfig.direction === 'asc' ? -1 : 1;
       if (valueA > valueB) return sortConfig.direction === 'asc' ? 1 : -1;
