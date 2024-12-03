@@ -970,7 +970,7 @@ const getSelectedCount = (checkedItems: { [key: string]: boolean }) => {
   return Object.values(checkedItems).filter(Boolean).length;
 };
 
-type SortDirection = 'asc' | 'desc';
+type SortDirection = 'asc' | 'desc' | null;
 
 export default function BudgetsPage() {
   const [showModal, setShowModal] = useState(false)
@@ -1288,7 +1288,7 @@ export default function BudgetsPage() {
     } else if (sortConfig && sortConfig.key === key && sortConfig.direction === 'desc') {
       direction = null;
     }
-    setSortConfig({ key, direction });
+    setSortConfig(direction === null ? null : { key, direction });
   };
 
   const sortedData = React.useMemo(() => {
