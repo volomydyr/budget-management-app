@@ -84,7 +84,7 @@ export function EntityCombobox({
         value={displayValue}
         readOnly
         onClick={() => setOpen(!open)}
-        className="w-full px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 placeholder:text-[#737373] bg-transparent truncate cursor-pointer text-[15px] h-9"
+        className="w-full px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 focus:outline-none placeholder:text-[#737373] bg-transparent truncate cursor-pointer text-[15px] h-9"
         placeholder="Link vendors, properties, or entities..."
       />
       

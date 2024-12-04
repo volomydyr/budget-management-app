@@ -109,7 +109,7 @@ const BudgetTreeItem = ({
           <input
             type="text"
             className={cn(
-              "w-full px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 focus-visible:ring-offset-0 placeholder:text-[#737373] bg-transparent truncate text-[15px] h-9",
+              "w-full px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 focus-visible:ring-offset-0 placeholder:text-[#737373] bg-transparent truncate text-[15px] h-[36px]",
               hasNegativeOverflow && "text-[#CE2C31] placeholder:text-[#CE2C31]/60"
             )}
             value={item.name}
@@ -140,7 +140,7 @@ const BudgetTreeItem = ({
           <input
             type="text"
             className={cn(
-              "px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 placeholder:text-[#737373] text-right w-[96px] bg-transparent text-[14px] h-9",
+              "px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 placeholder:text-[#737373] text-right w-[96px] bg-transparent text-[14px] h-[36px]",
               hasNegativeOverflow && "text-[#CE2C31] placeholder:text-[#CE2C31]/60"
             )}
             value={item.amount === 0 ? '' : formatNumber(Number(item.amount))}
@@ -223,7 +223,7 @@ const BudgetTreeItem = ({
                   <input
                     type="text"
                     disabled
-                    className="px-2 py-1 rounded border-none focus:ring-0 text-right w-full bg-transparent disabled:opacity-100 h-9 text-sm"
+                    className="px-2 py-1 rounded border-none focus:ring-0 text-right w-full bg-transparent disabled:opacity-100 h-[36px] text-sm"
                     value={formatNumberWithSign(overflow)}
                     style={{
                       color: overflow > 0 ? '#289951' : '#CE2C31'
@@ -486,7 +486,7 @@ const ContingencyPopover = ({
                 onValueChange(0);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-[36px]">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
@@ -501,7 +501,7 @@ const ContingencyPopover = ({
               {type === 'percentage' ? 'Percentage' : 'Amount'}
             </Label>
             <Input
-              type="number"
+              type="text"
               value={value || ''}
               onChange={(e) => {
                 // Remove any non-numeric characters
@@ -523,7 +523,8 @@ const ContingencyPopover = ({
                 }
               }}
               placeholder="0"
-              max={type === 'percentage' ? "100" : undefined}
+              className="-webkit-appearance-none"
+              style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
             />
             {type === 'percentage' && (
               <p className="text-sm text-muted-foreground">
@@ -1043,7 +1044,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                   handleDetailsChange();
                                 }}
                               >
-                                <SelectTrigger className="h-9">
+                                <SelectTrigger className="h-[36px]">
                                   <SelectValue placeholder="Select parent budget" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1084,7 +1085,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                   handleDetailsChange();
                                 }}
                               >
-                                <SelectTrigger>
+                                <SelectTrigger className="h-[36px]">
                                   <SelectValue placeholder="Select type..." />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1119,7 +1120,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                     }}
                                     placeholder="0"
                                     className={cn(
-                                      "h-10 max-w-[480px]",
+                                      "h-[36px]",
                                       budgetOverflow < 0 && parentBudget !== 'none' && "border-[#CE2C31] focus-visible:ring-[#CE2C31]"
                                     )}
                                   />
@@ -1177,7 +1178,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                             <div>
                               <Label>Currency</Label>
                               <Select value={currency} onValueChange={setCurrency}>
-                                <SelectTrigger className="h-9">
+                                <SelectTrigger className="h-[36px]">
                                   <SelectValue placeholder="Select currency" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1194,7 +1195,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                 <span className="text-[#CE2C31] ml-0.5 text-lg">*</span>
                               </Label>
                               <Select value={period} onValueChange={setPeriod}>
-                                <SelectTrigger>
+                                <SelectTrigger className="h-[36px]">
                                   <SelectValue placeholder="Select period" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1219,7 +1220,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                     <Button
                                       variant="outline"
                                       className={cn(
-                                        "w-full justify-start text-left font-normal h-10 pr-3 shadow-none hover:text-muted-foreground", // Added hover:text-muted-foreground
+                                        "w-full justify-start text-left font-normal h-[36px] pr-3 shadow-none hover:text-muted-foreground", // Added hover:text-muted-foreground
                                         !startDate && "text-muted-foreground"
                                       )}
                                     >
@@ -1245,7 +1246,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                     <Button
                                       variant="outline"
                                       className={cn(
-                                        "w-full justify-start text-left font-normal h-10 pr-3 shadow-none hover:text-muted-foreground", // Added hover:text-muted-foreground
+                                        "w-full justify-start text-left font-normal h-[36px] pr-3 shadow-none hover:text-muted-foreground", // Added hover:text-muted-foreground
                                         !endDate && "text-muted-foreground"
                                       )}
                                     >
@@ -1271,7 +1272,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                             <div>
                               <Label>Category</Label>
                               <Select value={costCategory || 'not-set'} onValueChange={setCostCategory}>
-                                <SelectTrigger>
+                                <SelectTrigger className="h-[36px]">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1286,7 +1287,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                               <Label>Vendors</Label>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <button className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-50">
+                                  <button className="flex h-[36px] w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-50">
                                     <span className={cn(
                                       "truncate",
                                       selectedTags.length === 0 && "text-muted-foreground"
@@ -1341,7 +1342,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                               <Label>Properties</Label>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <button className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-50">
+                                  <button className="flex h-[36px] w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-50">
                                     <span className={cn(
                                       "truncate",
                                       selectedProperties.length === 0 && "text-muted-foreground"
@@ -1396,7 +1397,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                               <Label>Legal entities</Label>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <button className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-50">
+                                  <button className="flex h-[36px] w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground hover:bg-muted/50 disabled:cursor-not-allowed disabled:opacity-50">
                                     <span className={cn(
                                       "truncate",
                                       selectedLegalEntities.length === 0 && "text-muted-foreground"

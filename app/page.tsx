@@ -1062,24 +1062,24 @@ export default function BudgetsPage() {
       <React.Fragment key={item.id}>
         <TableRow 
           className={cn(
-            "h-10 hover:bg-muted/50",
+            "h-9 hover:bg-muted/50",
             level > 0 && "bg-muted/30"
           )}
         >
           <TableCell className="w-[320px] p-0 sticky left-0 bg-background z-20">
             <div className="flex items-center relative w-[320px]">
-              <div className="w-10 flex items-center justify-center">
+              <div className="w-10 flex items-center justify-center pl-7">
                 <Checkbox 
                   checked={checkedItems[item.name] || false}
                   onCheckedChange={(checked) => handleSingleCheck(item.name, checked as boolean)}
                 />
               </div>
-              <div className="flex items-center gap-2 overflow-hidden -ml-2">
+              <div className="flex items-center gap-2 overflow-hidden -ml-1">
                 <div style={{ width: `${level * 24}px` }} className="flex-shrink-0" />
                 {hasChildren && (
                   <button
                     onClick={() => item.id && toggleRowExpansion(item.id)}
-                    className="p-1 hover:bg-[#E4E4E5] rounded-sm flex-shrink-0"
+                    className="p-1 hover:bg-[#E4E4E5] rounded-sm flex-shrink-0 ml-2"
                   >
                     {isExpanded ? (
                       <ChevronDown className="h-4 w-4" />
@@ -1358,7 +1358,7 @@ export default function BudgetsPage() {
               <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search..."
-                className="w-[240px] h-9 text-sm pl-9 search-input"
+                className="w-[240px] h-9 text-sm pl-9"
               />
             </div>
           </div>
@@ -1402,21 +1402,21 @@ export default function BudgetsPage() {
           </div>
         </div>
         
-        {/* Table section - simplified wrapper structure */}
-        <div className="flex-1 overflow-x-auto">
+        {/* Table section - remove horizontal padding */}
+        <div className="flex-1 overflow-x-auto -mx-6">
           <Table className="w-full relative nowrap-table">
             <TableHeader className="sticky top-0 bg-background z-10">
               <TableRow noBorder className="h-[52px] hover:bg-transparent">
                 <TableHead className="w-[320px] p-0 sticky left-0 bg-background z-20">
                   <div className="flex items-center relative w-[320px]">
-                    <div className="w-10 flex items-center justify-center">
+                    <div className="w-10 flex items-center justify-center pl-7">
                       <Checkbox 
                         checked={isAllChecked}
                         indeterminate={isSomeChecked()}
                         onCheckedChange={handleCheckAll}
                       />
                     </div>
-                    <div className="text-sm font-semibold text-muted-foreground pl-[32px]">
+                    <div className="text-sm font-semibold text-muted-foreground pl-[44px]">
                       Name
                     </div>
                   </div>
@@ -1555,8 +1555,9 @@ export default function BudgetsPage() {
               <TableRow className="[&_td]:font-[500] h-[52px] relative">
                 <TableCell className="w-[320px] p-0 sticky left-0 bg-background z-20">
                   <div className="flex items-center relative w-[320px]">
-                    <div className="w-10" />
-                    <span className="text-sm font-semibold text-[#737373] pl-8">
+                    <div className="w-10 pl-7">
+                    </div>
+                    <span className="text-sm font-semibold text-[#737373] pl-9">
                       {Object.values(checkedItems).some(value => value) ? "Selected totals:" : "Totals:"}
                     </span>
                   </div>

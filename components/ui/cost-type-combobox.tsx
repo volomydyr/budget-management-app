@@ -75,7 +75,7 @@ export function CostTypeCombobox({ value, onChange, placeholder = "Select catego
         value={displayValue}
         readOnly
         onClick={() => setOpen(!open)}
-        className="w-full px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 placeholder:text-[#737373] bg-transparent truncate cursor-pointer text-[15px] h-9"
+        className="w-full px-2 py-1 rounded hover:bg-muted border-none focus:ring-0 focus:outline-none placeholder:text-[#737373] bg-transparent truncate cursor-pointer text-[15px] h-9"
         placeholder={placeholder}
       />
       
@@ -86,11 +86,11 @@ export function CostTypeCombobox({ value, onChange, placeholder = "Select catego
             onClick={() => setOpen(false)}
           />
           <div 
-            className="absolute z-50 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md"
+            className="absolute z-50 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md mt-1"
             style={{ 
               position: 'fixed', 
               left: inputRef.current?.getBoundingClientRect().left + 'px',
-              bottom: window.innerHeight - (inputRef.current?.getBoundingClientRect().top || 0) + 'px',
+              bottom: window.innerHeight - (inputRef.current?.getBoundingClientRect().top || 0) + 4 + 'px',
               width: inputRef.current?.offsetWidth + 'px'
             }}
           >

@@ -90,8 +90,6 @@ body {
 
 thead .sticky.top-0,
 table .sticky.top-0 {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08),
-              0 2px 6px rgba(0, 0, 0, 0.12);
   background-color: #ffffff;
   background-clip: padding-box;
 }
@@ -243,7 +241,7 @@ tfoot tr td:first-child + td .absolute {
 
 /* Update the sticky bottom-0 style to not apply to tfoot */
 .sticky.bottom-0:not(tfoot tr td) {
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  /* Remove the box-shadow */
 }
 
 /* Add these new styles for the border colors */
@@ -305,7 +303,7 @@ html::-webkit-scrollbar {
 }
 
 /* Add this specific style */
-tfoot tr.h-[52px] {
+tfoot tr.h-\[52px\] {
   height: 52px !important;
 }
 
