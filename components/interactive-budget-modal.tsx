@@ -1269,7 +1269,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                             </div>
 
                             <div>
-                              <Label>Cost category</Label>
+                              <Label>Category</Label>
                               <Select value={costCategory || 'not-set'} onValueChange={setCostCategory}>
                                 <SelectTrigger>
                                   <SelectValue />
