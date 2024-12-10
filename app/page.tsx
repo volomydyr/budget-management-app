@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { InteractiveBudgetModalComponent } from "@/components/interactive-budget-modal"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowUp, ArrowDown, Filter, Download, MoreHorizontal, Settings, Plus, Info, Search, ChevronRight, ChevronDown, Copy, Receipt } from 'lucide-react'
+import { ArrowUp, ArrowDown, Filter, Download, MoreHorizontal, Settings, Plus, Info, Search, ChevronRight, ChevronDown, Copy, Receipt, Share2 } from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -991,18 +991,8 @@ export default function BudgetsPage() {
   const [showModal, setShowModal] = useState(false)
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({})
   const [isAllChecked, setIsAllChecked] = useState(false)
-  const [sharedUsers, setSharedUsers] = useState<{ [key: string]: Array<typeof userPool[0]> }>({})
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
-
-  useEffect(() => {
-    const newSharedUsers: { [key: string]: Array<typeof userPool[0]> } = {}
-    budgetData.forEach((budget) => {
-      const shuffled = [...userPool].sort(() => 0.5 - Math.random())
-      newSharedUsers[budget.name] = shuffled.slice(0, 2 + Math.floor(Math.random() * 2)) // 2-3 users
-    })
-    setSharedUsers(newSharedUsers)
-  }, [])
 
   const handleCheckAll = (checked: boolean) => {
     setIsAllChecked(checked)
@@ -1068,15 +1058,17 @@ export default function BudgetsPage() {
         >
           <TableCell className="w-[320px] p-0 sticky left-0 bg-background z-20">
             <div className="flex items-center relative w-[320px]">
-              <div className="w-10 flex items-center justify-center pl-7">
-                <Checkbox 
-                  checked={checkedItems[item.name] || false}
-                  onCheckedChange={(checked) => handleSingleCheck(item.name, checked as boolean)}
-                />
+              <div className="w-10 flex items-center justify-center pl-7 relative">
+                <div className="absolute">
+                  <Checkbox 
+                    checked={checkedItems[item.name] || false}
+                    onCheckedChange={(checked) => handleSingleCheck(item.name, checked as boolean)}
+                  />
+                </div>
               </div>
               <div className="flex items-center gap-2 overflow-hidden -ml-1">
                 <div style={{ width: `${level * 24}px` }} className="flex-shrink-0" />
-                {hasChildren && (
+                {hasChildren ? (
                   <button
                     onClick={() => item.id && toggleRowExpansion(item.id)}
                     className="p-1 hover:bg-[#E4E4E5] rounded-sm flex-shrink-0 ml-2"
@@ -1087,8 +1079,9 @@ export default function BudgetsPage() {
                       <ChevronRight className="h-4 w-4" />
                     )}
                   </button>
+                ) : (
+                  <div className="ml-2 w-[24px] flex-shrink-0" />
                 )}
-                {!hasChildren && <div className="w-6 flex-shrink-0" />}
                 <span className="truncate">{item.name}</span>
               </div>
             </div>
@@ -1192,11 +1185,11 @@ export default function BudgetsPage() {
               </>
             )}
           </TableCell>
-          <TableCell className="pl-4 pr-10 text-sm">{periodDates.start}</TableCell>
-          <TableCell className="pl-4 pr-10 text-sm">{periodDates.end}</TableCell>
-          <TableCell className="pl-4 pr-10 text-sm">{item.vendor || '-'}</TableCell>
-          <TableCell className="pl-4 pr-10 text-sm">{item.property || '-'}</TableCell>
-          <TableCell className="pl-4 pr-10 text-sm">{item.legalEntity || '-'}</TableCell>
+          <TableCell className="pl-4 pr-10 text-sm">{periodDates.start === '-' ? <span className="text-[#A0A0A0]">-</span> : periodDates.start}</TableCell>
+          <TableCell className="pl-4 pr-10 text-sm">{periodDates.end === '-' ? <span className="text-[#A0A0A0]">-</span> : periodDates.end}</TableCell>
+          <TableCell className="pl-4 pr-10 text-sm">{item.vendor || <span className="text-[#A0A0A0]">-</span>}</TableCell>
+          <TableCell className="pl-4 pr-10 text-sm">{item.property || <span className="text-[#A0A0A0]">-</span>}</TableCell>
+          <TableCell className="pl-4 pr-10 text-sm">{item.legalEntity || <span className="text-[#A0A0A0]">-</span>}</TableCell>
           <TableCell className="pl-4 pr-5">
             <div className="flex items-center gap-2">
               {item.owner === "Dianne Russell" || 
@@ -1213,9 +1206,9 @@ export default function BudgetsPage() {
                     src={`${
                       item.owner === "Dianne Russell" ? "https://i.pravatar.cc/150?img=1" :
                       item.owner === "Floyd Miles" ? "https://i.pravatar.cc/150?img=12" :
-                      item.owner === "Leslie Alexander" ? "https://i.pravatar.cc/150?img=24" :
+                      item.owner === "Leslie Alexander" ? "https://i.pravatar.cc/150?img=5" :
                       item.owner === "Brooklyn Simmons" ? "https://i.pravatar.cc/150?img=47" :
-                      item.owner === "Jenny Wilson" ? "https://i.pravatar.cc/150?img=25" :
+                      item.owner === "Jenny Wilson" ? "https://i.pravatar.cc/150?img=33" :
                       item.owner === "Cameron Williamson" ? "https://i.pravatar.cc/150?img=15" :
                       item.owner === "Victoria Chen" ? "https://i.pravatar.cc/150?img=41" :
                       item.owner === "Marcus Thompson" ? "https://i.pravatar.cc/150?img=11" :
@@ -1352,7 +1345,7 @@ export default function BudgetsPage() {
             </Button>
             <Button variant="outline" size="sm" className="h-9 text-sm">
               <Settings className="h-4 w-4" />
-              13/13 columns
+              18/18 columns
             </Button>
             <div className="relative">
               <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
@@ -1373,7 +1366,7 @@ export default function BudgetsPage() {
               disabled={getSelectedCount(checkedItems) !== 1}
             >
               <Copy className="h-4 w-4" />
-              Copy budget
+              Duplicate
             </Button>
             <Button 
               variant="outline" 
@@ -1386,6 +1379,18 @@ export default function BudgetsPage() {
             >
               <Receipt className="h-4 w-4" />
               Log invoice
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className={cn(
+                "h-9 text-sm",
+                "disabled:bg-[#fafafa]"
+              )}
+              disabled={getSelectedCount(checkedItems) !== 1}
+            >
+              <Share2 className="h-4 w-4" />
+              Share
             </Button>
             <Button variant="outline" size="sm" className="h-9 text-sm">
               <Download className="h-4 w-4" />
@@ -1409,12 +1414,14 @@ export default function BudgetsPage() {
               <TableRow noBorder className="h-[52px] hover:bg-transparent">
                 <TableHead className="w-[320px] p-0 sticky left-0 bg-background z-20">
                   <div className="flex items-center relative w-[320px]">
-                    <div className="w-10 flex items-center justify-center pl-7">
-                      <Checkbox 
-                        checked={isAllChecked}
-                        indeterminate={isSomeChecked()}
-                        onCheckedChange={handleCheckAll}
-                      />
+                    <div className="w-10 flex items-center justify-center pl-7 relative">
+                      <div className="absolute">
+                        <Checkbox 
+                          checked={isAllChecked}
+                          indeterminate={isSomeChecked()}
+                          onCheckedChange={handleCheckAll}
+                        />
+                      </div>
                     </div>
                     <div className="text-sm font-semibold text-muted-foreground pl-[44px]">
                       Name

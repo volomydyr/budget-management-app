@@ -118,20 +118,20 @@ const BudgetTreeItem = ({
           />
         </div>
 
+        {/* Cost Type Combobox - Moved before the entity linking */}
+        <div className="w-[160px] flex-shrink-0">
+          <CostTypeCombobox
+            value={item.costType}
+            onChange={(value) => onUpdate(item.id, 'costType', value)}
+          />
+        </div>
+
         {/* Link to field */}
         <div className="w-[312px] flex-shrink-0">
           <EntityCombobox
             value={item.linkedEntityId || []}
             onChange={(value) => onUpdate(item.id, 'linkedEntityId', value)}
             items={items}
-          />
-        </div>
-
-        {/* Cost Type Combobox */}
-        <div className="w-[160px] flex-shrink-0">
-          <CostTypeCombobox
-            value={item.costType}
-            onChange={(value) => onUpdate(item.id, 'costType', value)}
           />
         </div>
 
@@ -502,7 +502,7 @@ const ContingencyPopover = ({
             </Label>
             <Input
               type="text"
-              value={value || ''}
+              value={type === 'percentage' ? value || '' : formatNumber(value)}
               onChange={(e) => {
                 // Remove any non-numeric characters
                 const numericValue = e.target.value.replace(/[^0-9]/g, '');
@@ -1075,7 +1075,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                             <div>
                               <Label>
                                 {parentBudget === 'none' ? 'Budget type' : 'Sub-budget type'}
-                                <span className="text-[#CE2C31] ml-0.5 text-lg">*</span>
+                                <span className="text-[#CE2C31] ml-0.5 text-base">*</span>
                               </Label>
                               <Select 
                                 value={budgetType} 
@@ -1101,7 +1101,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                 <div>
                                   <Label>
                                     Total amount
-                                    <span className="text-[#CE2C31] ml-0.5 text-lg">*</span>
+                                    <span className="text-[#CE2C31] ml-0.5 text-base">*</span>
                                   </Label>
                                   <Input
                                     type="text"
@@ -1135,7 +1135,10 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
 
                             {budgetType === 'percentage' && parentBudget !== 'none' && (
                               <div className="space-y-0">
-                                <Label>Percentage</Label>
+                                <Label>
+                                  Percentage
+                                  <span className="text-[#CE2C31] ml-0.5 text-base">*</span>
+                                </Label>
                                 <Input
                                   type="text"
                                   value={budgetValue === '0' ? '' : budgetValue}
@@ -1155,7 +1158,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                                   placeholder="0"
                                   max="100"
                                   className={cn(
-                                    "h-10 max-w-[480px]",
+                                    "h-[36px] max-w-[480px]",
                                     budgetOverflow < 0 && "border-[#CE2C31] focus-visible:ring-[#CE2C31]"
                                   )}
                                 />
@@ -1176,7 +1179,10 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                             )}
 
                             <div>
-                              <Label>Currency</Label>
+                              <Label>
+                                Currency
+                                <span className="text-[#CE2C31] ml-0.5 text-base">*</span>
+                              </Label>
                               <Select value={currency} onValueChange={setCurrency}>
                                 <SelectTrigger className="h-[36px]">
                                   <SelectValue placeholder="Select currency" />
@@ -1192,7 +1198,7 @@ export function InteractiveBudgetModalComponent({ isOpen, onClose }: Interactive
                             <div>
                               <Label>
                                 Budget period
-                                <span className="text-[#CE2C31] ml-0.5 text-lg">*</span>
+                                <span className="text-[#CE2C31] ml-0.5 text-base">*</span>
                               </Label>
                               <Select value={period} onValueChange={setPeriod}>
                                 <SelectTrigger className="h-[36px]">
